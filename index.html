@@ -331,10 +331,10 @@ function renderStep(){
       <div class="field"><label>1. שם מלא *</label><input type="text" id="fName" value="${state.name}"></div>
       <div class="field"><label>2. טלפון נייד לאימות *</label><input type="tel" id="fPhone" placeholder="05X-XXXXXXX" inputmode="numeric" maxlength="10" value="${state.phone}"><div class="fhint">מספר נייד מלא בן 10 ספרות, לדוגמה 0521234567</div></div>
       <div class="field-row">
-        <div class="field"><label>3. תאריך לידה *</label><input type="date" id="fBirth" max="${today}" value="${state.birthdate}"></div>
+        <div class="field"><label>3. תאריך לידה *</label><input type="date" id="fBirth" max="${today}" value="${state.birthdate}"><div class="fhint">תעודת זהות מונפקת מגיל 16 ומעלה</div></div>
         <div class="field"><label>4. תעודת זהות *</label><input type="text" id="fId" inputmode="numeric" maxlength="9" value="${state.idnum}"><div class="fhint">9 ספרות בדיוק, ללא מקפים או רווחים</div></div>
       </div>
-      <div class="field"><label>5. תאריך הנפקת תעודת זהות *</label><input type="date" id="fIdDate" max="${today}" value="${state.iddate}"><div class="fhint">נדרש לאימות פרטים ובדיקה מקיפה מול הר הביטוח</div></div>
+      <div class="field"><label>5. תאריך הנפקת תעודת זהות *</label><input type="date" id="fIdDate" max="${today}" value="${state.iddate}"><div class="fhint">לא יכול להיות לפני גיל 16 או תאריך עתידי</div></div>
       <label class="consent"><input type="checkbox" id="cTerms" ${state.consentTerms?'checked':''}><span>אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות של קפלן דהאן *</span></label>
       <label class="consent"><input type="checkbox" id="cUpdates" ${state.consentUpdates?'checked':''}><span>אני מאשר/ת קבלת עדכונים, וידוע לי שניתן להסיר את עצמי בכל עת</span></label>
       <div class="nav-row"><button class="btn-ghost" id="backBtn">חזור</button><button class="btn-primary" id="submitBtn">שליחה – לבדיקה בחינם ›</button></div>
@@ -364,6 +364,24 @@ async function submitForm(){
   saveContactFields();
   if(!state.name || !state.phone || !state.birthdate || !state.idnum || !state.iddate){
     alert('נא למלא את כל שדות החובה'); return;
+  }
+  const birth = new Date(state.birthdate);
+  const now = new Date();
+  let age = now.getFullYear() - birth.getFullYear();
+  const hasHadBirthdayThisYear = (now.getMonth() > birth.getMonth()) || (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate());
+  if(!hasHadBirthdayThisYear) age--;
+  if(isNaN(birth.getTime()) || age < 16){
+    alert('תעודת זהות מונפקת רק מגיל 16 ומעלה — נא להזין תאריך לידה תקין של מי שכבר הגיע לגיל 16');
+    document.getElementById('fBirth').focus();
+    return;
+  }
+  const idDate = new Date(state.iddate);
+  const earliestIssue = new Date(birth);
+  earliestIssue.setFullYear(earliestIssue.getFullYear() + 16);
+  if(isNaN(idDate.getTime()) || idDate > now || idDate < earliestIssue){
+    alert('תאריך הנפקת תעודת הזהות אינו תקין — הוא לא יכול להיות לפני גיל 16 או תאריך עתידי');
+    document.getElementById('fIdDate').focus();
+    return;
   }
   const phoneDigits = state.phone.replace(/\D/g,'');
   if(phoneDigits.length !== 10 || !/^05\d{8}$/.test(phoneDigits)){
@@ -434,7 +452,7 @@ renderStep();
 
 /* ---------- COMPARE TABLE ---------- */
 const COMPARE_ROWS = [
-  { topic:'איתור כפל אמיתי', selfOk:false, selfText:'קשה לדעת אם זה כפל מיותר', agentText:'בדיקה מקצועית ומדויקת' },
+  { topic:'איתור כפל אמיתי', selfOk:false, selfText:'קשה לדעת אם זה כפל מיותר או הרחבה של ביטוח קיים', agentText:'בדיקה מקצועית ומדויקת' },
   { topic:'החלטה על ביטול', selfOk:false, selfText:'עלול לפגוע בזכויות', agentText:'בחינה לפני כל שינוי' },
   { topic:'התאמה אישית', selfOk:false, selfText:'קשה להעריך לבד', agentText:'המלצות לפי הצרכים שלכם' },
   { topic:'חיסכון בעלויות', selfOk:false, selfText:'לא ברור מה בטוח להוזיל', agentText:'בדיקה מסודרת של אפשרויות' },
