@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>בדיקה מקיפה בהר הביטוח בחינם | איתור כפל ביטוחים | קפלן דהאן</title>
+<title>בדיקה מקיפה בהר הביטוח | איתור כפל ביטוחים | קפלן דהאן</title>
 <style>
   :root{
     --navy:#0f2a4a;
@@ -174,15 +174,15 @@
 
 <div class="hero">
   <div class="wrap">
-    <span class="eyebrow">בדיקת כפל ביטוחים בחינם</span>
-    <h1>בדיקה בהר הביטוח: <span>איתור כפל ביטוחים בחינם</span></h1>
+    <span class="eyebrow">בדיקת כפל ביטוחים</span>
+    <h1>בדיקה בהר הביטוח: <span>איתור כפל ביטוחים</span></h1>
     <p class="lead">בדקו אם אתם משלמים על ביטוחים כפולים והפסיקו תשלומים מיותרים — עושים סדר בתיק הביטוח, עם סוכן ביטוח מורשה.</p>
     <div class="hero-badges">
       <span>בריאות, חיים ומשכנתא</span>
       <span>סוכן ביטוח מורשה</span>
       <span>ללא עלות וללא התחייבות</span>
     </div>
-    <a class="hero-cta" href="#leadForm">לבדיקת כפל ביטוחים בחינם</a>
+    <a class="hero-cta" href="#leadForm">לבדיקת כפל ביטוחים</a>
   </div>
 </div>
 
@@ -190,7 +190,7 @@
 
   <!-- FORM -->
   <div id="leadForm" class="card form-card">
-    <h2 class="sec-title">בצעו בדיקת כפל ביטוחים בחינם</h2>
+    <h2 class="sec-title">בצעו בדיקת כפל ביטוחים</h2>
     <p class="sec-sub">איתור כיסויים כפולים או מיותרים בביטוחי הבריאות, החיים והמשכנתא.</p>
 
     <div class="progress-track" id="progressTrack">
@@ -224,7 +224,7 @@
   <!-- FINAL CTA -->
   <section>
     <div class="final-cta">
-      <h3>בדקו את תיק הביטוח שלכם בחינם</h3>
+      <h3>בדקו את תיק הביטוח שלכם</h3>
       <p>ייתכן שאתם משלמים על ביטוחים כפולים, ישנים או לא נחוצים.</p>
       <a class="btn" href="#leadForm">בדקו את תיק הביטוח שלי ←</a>
     </div>
@@ -270,8 +270,6 @@ const hasInsOptions = [
 const state = {
   age:'', hasInsurance:null, spend:null,
   name:'', phone:'',
-  birthdate:'', idnum:'', iddate:'',
-  consentAuth:false, consentTerms:false,
 };
 
 const stepArea = document.getElementById('stepArea');
@@ -290,13 +288,11 @@ function scrollToForm(){
   document.getElementById('leadForm').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function renderScreen(){
+function renderScreen(shouldScroll){
   if(screen === 'quick') renderQuick();
   else if(screen === 'contact') renderContact();
   else if(screen === 'result') renderResult();
-  else if(screen === 'explain') renderExplain();
-  else if(screen === 'details') renderDetails();
-  scrollToForm();
+  if(shouldScroll) scrollToForm();
 }
 
 function renderQuick(){
@@ -330,7 +326,7 @@ function renderQuick(){
     if(!ageNum || ageNum < 18 || ageNum > 100){ alert('נא להזין גיל תקין (18 ומעלה)'); return; }
     if(!state.hasInsurance){ alert('נא לבחור תשובה לגבי ביטוחים פרטיים'); return; }
     if(!state.spend){ alert('נא לבחור טווח תשלום חודשי'); return; }
-    screen = 'contact'; renderScreen();
+    screen = 'contact'; renderScreen(true);
   });
 }
 
@@ -344,7 +340,7 @@ function renderContact(){
   document.getElementById('backBtn').addEventListener('click', ()=>{
     state.name = document.getElementById('fName').value;
     state.phone = document.getElementById('fPhone').value;
-    screen = 'quick'; renderScreen();
+    screen = 'quick'; renderScreen(true);
   });
   document.getElementById('submitBtn').addEventListener('click', submitStage1);
 }
@@ -390,7 +386,7 @@ async function submitStage1(){
   } catch(err){
     // still continue to result screen even if lead #1 failed to send - don't block the funnel
   }
-  screen = 'result'; renderScreen();
+  screen = 'result'; renderScreen(true);
 }
 
 function renderResult(){
@@ -398,107 +394,34 @@ function renderResult(){
   let html = `<div class="sent-box">
     <div class="chk">✓</div>
     <h3>נראה שכדאי לבדוק את תיק הביטוח שלך</h3>
-    <p>לפי מה שסימנתם, ייתכן שיש מקום לבדוק כפל ביטוחים או לחסוך בעלויות. בדיקה מלאה מול הר הביטוח יכולה לתת תמונה מדויקת - זה ייקח כמה דקות נוספות בלבד.</p>
+    <p>לפי מה שסימנתם, ייתכן שיש מקום לבדוק כפל ביטוחים או לחסוך בעלויות.</p>
   </div>
   <div class="nav-row" style="margin-top:16px;">
     <a href="tel:03-3731410" class="btn-ghost" style="text-decoration:none;padding:13px 10px;">לא כרגע, תודה</a>
-    <button class="btn-primary" id="continueBtn">כן, רוצה בדיקה מלאה בחינם ›</button>
+    <button class="btn-primary" id="continueBtn">כן, רוצה בדיקה מלאה ›</button>
   </div>`;
   stepArea.innerHTML = html;
-  document.getElementById('continueBtn').addEventListener('click', ()=>{ screen = 'explain'; renderScreen(); });
+  document.getElementById('continueBtn').addEventListener('click', confirmInterest);
 }
 
-function renderExplain(){
-  let html = `<div class="step-title">עוד רגע לפני הבדיקה המלאה</div>
-    <div class="info-box" style="font-size:13px;line-height:1.7;">
-      כדי לבצע בדיקה מקיפה מול הר הביטוח, נדרשים פרטי זיהוי - תעודת זהות ותאריך הנפקה. הפרטים משמשים אך ורק לאימות זהותכם ולשליפת המידע הביטוחי הרלוונטי מול המערכות הרשמיות, בכפוף להרשאה מפורשת שתאשרו. לא תתבצע כל פעולה בפוליסות שלכם - לא ביטול, לא שינוי ולא רכישה - ללא אישורכם המפורש.
-    </div>
-    <div class="nav-row" style="margin-top:16px;"><button class="btn-ghost" id="backBtn">חזור</button><button class="btn-primary" id="nextBtn">הבנתי, נמשיך ›</button></div>`;
-  stepArea.innerHTML = html;
-  document.getElementById('backBtn').addEventListener('click', ()=>{ screen = 'result'; renderScreen(); });
-  document.getElementById('nextBtn').addEventListener('click', ()=>{ screen = 'details'; renderScreen(); });
-}
-
-function renderDetails(){
-  const today = new Date().toISOString().split('T')[0];
-  let html = `
-    <div class="step-title">פרטים לבדיקה המלאה</div>
-    <div class="field"><label>תאריך לידה *</label><input type="date" id="fBirth" max="${today}" value="${state.birthdate}"><div class="fhint">תעודת זהות מונפקת מגיל 16 ומעלה</div></div>
-    <div class="field"><label>תעודת זהות *</label><input type="text" id="fId" inputmode="numeric" maxlength="9" value="${state.idnum}"><div class="fhint">9 ספרות בדיוק, ללא מקפים או רווחים</div></div>
-    <div class="field"><label>תאריך הנפקת תעודת זהות *</label><input type="date" id="fIdDate" max="${today}" value="${state.iddate}"><div class="fhint">נא להזין את התעודה העדכנית והבתוקף</div></div>
-    <label class="consent"><input type="checkbox" id="cAuth" ${state.consentAuth?'checked':''}><span>אני מאשר/ת לסוכן ביטוח מורשה מטעם קפלן דהאן לבצע עבורי בדיקה מול הר הביטוח לצורך איתור פוליסות וכפל ביטוחי *</span></label>
-    <label class="consent"><input type="checkbox" id="cTerms" ${state.consentTerms?'checked':''}><span>אני מאשר/ת את תנאי השימוש ומדיניות הפרטיות של קפלן דהאן *</span></label>
-    <div class="info-box">נציג מטעם קפלן דהאן ייצור עמכם קשר, וייתכן שיהיה צורך לקבל פרטים נוספים לצורך ביצוע הבדיקה בפועל מול הר הביטוח.</div>
-    <div class="nav-row"><button class="btn-ghost" id="backBtn">חזור</button><button class="btn-primary" id="submitBtn">שליחה – לבדיקה מלאה ›</button></div>`;
-  stepArea.innerHTML = html;
-  document.getElementById('backBtn').addEventListener('click', ()=>{ saveDetailsFields(); screen = 'explain'; renderScreen(); });
-  document.getElementById('submitBtn').addEventListener('click', submitStage2);
-}
-
-function saveDetailsFields(){
-  const b=document.getElementById('fBirth'), i=document.getElementById('fId'), d=document.getElementById('fIdDate'),
-        ca=document.getElementById('cAuth'), ct=document.getElementById('cTerms');
-  if(b) state.birthdate=b.value;
-  if(i) state.idnum=i.value;
-  if(d) state.iddate=d.value;
-  if(ca) state.consentAuth=ca.checked;
-  if(ct) state.consentTerms=ct.checked;
-}
-
-async function submitStage2(){
-  saveDetailsFields();
-  if(!state.birthdate || !state.idnum || !state.iddate){
-    alert('נא למלא את כל שדות החובה'); return;
-  }
-  const birth = new Date(state.birthdate);
-  const now = new Date();
-  let age = now.getFullYear() - birth.getFullYear();
-  const hadBirthday = (now.getMonth() > birth.getMonth()) || (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate());
-  if(!hadBirthday) age--;
-  if(isNaN(birth.getTime()) || age < 16){
-    alert('תעודת זהות מונפקת רק מגיל 16 ומעלה — נא להזין תאריך לידה תקין');
-    document.getElementById('fBirth').focus();
-    return;
-  }
-  const idDate = new Date(state.iddate);
-  const earliestIssue = new Date(birth);
-  earliestIssue.setFullYear(earliestIssue.getFullYear() + 16);
-  if(isNaN(idDate.getTime()) || idDate > now || idDate < earliestIssue){
-    alert('תאריך הנפקת תעודת הזהות אינו תקין');
-    document.getElementById('fIdDate').focus();
-    return;
-  }
-  const idDigits = state.idnum.replace(/\D/g,'');
-  if(idDigits.length !== 9){
-    alert('נא להזין תעודת זהות בת 9 ספרות בדיוק');
-    document.getElementById('fId').focus();
-    return;
-  }
-  state.idnum = idDigits;
-  if(!state.consentAuth || !state.consentTerms){
-    alert('יש לאשר את שני התנאים כדי להמשיך'); return;
-  }
-
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'שולח...';
+async function confirmInterest(){
+  const continueBtn = document.getElementById('continueBtn');
+  continueBtn.disabled = true;
+  continueBtn.textContent = 'שולח...';
 
   const insuranceText = hasInsOptions.find(o=>o.id===state.hasInsurance)?.text || '';
   const spendText = spendOptions.find(o=>o.id===state.spend)?.text || '';
 
   const payload = {
     access_key: '3196d164-1737-4d2b-b915-475e7d224172',
-    subject: 'בדיקה מלאה (שלב 2 הושלם) - הר הביטוח - ' + state.name,
-    from_name: 'טופס הר הביטוח - בדיקה מלאה - קפלן דהאן',
+    subject: 'ליד מאושר לבדיקה מלאה - הר הביטוח - ' + state.name,
+    from_name: 'טופס הר הביטוח - אישר בדיקה מלאה - קפלן דהאן',
     'שם מלא': state.name,
     'טלפון': state.phone,
     'גיל': state.age,
     'יש ביטוחים פרטיים': insuranceText,
     'תשלום חודשי משוער': spendText,
-    'תאריך לידה': state.birthdate,
-    'תעודת זהות': state.idnum,
-    'תאריך הנפקת ת.ז': state.iddate,
-    'שלב': 'השלים גם שלב 2 - ביקש בדיקה מלאה ואישר הרשאה',
+    'שלב': 'אישר רצון בבדיקה מלאה - יש ליצור קשר טלפוני ולהשלים ת.ז ותאריך הנפקה',
   };
 
   try{
@@ -508,23 +431,21 @@ async function submitStage2(){
     });
     const data = await res.json();
     if(!data.success) throw new Error(data.message || 'שגיאה בשליחה');
-    showThankYou();
   } catch(err){
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'שליחה – לבדיקה מלאה ›';
-    alert('אירעה שגיאה בשליחה. ניתן ליצור קשר ישירות בטלפון 03-3731410.');
+    // even if this secondary ping fails, the stage-1 lead was already sent - don't block the user
   }
+  showThankYou();
 }
 
 function showThankYou(){
   stepArea.innerHTML = `<div class="sent-box">
     <div class="chk">✓</div>
     <h3>תודה, ${state.name}!</h3>
-    <p>הפרטים נשלחו בהצלחה. סוכן מורשה מטעם קפלן דהאן יחזור אליכם בהקדם לבדיקה מקיפה של תיק הביטוח.<br>לשאלות דחופות ניתן להתקשר ל-03-3731410.</p>
+    <p>סוכן מורשה מטעם קפלן דהאן ייצור עמכם קשר טלפוני בהקדם, וישלים את יתר הפרטים הנדרשים (כולל תעודת זהות ותאריך הנפקה) לצורך ביצוע הבדיקה המלאה מול הר הביטוח.<br>לשאלות דחופות ניתן להתקשר ל-03-3731410.</p>
   </div>`;
 }
 
-renderScreen();
+renderScreen(false);
 
 /* ---------- COMPARE TABLE ---------- */
 const COMPARE_ROWS = [
@@ -548,9 +469,9 @@ compareArea.innerHTML = compareHtml;
 
 /* ---------- FAQ ---------- */
 const FAQS = [
-  { q:'האם הבדיקה באמת בחינם?', a:'כן, ללא עלות וללא התחייבות.' },
+  { q:'האם יש עלות לבדיקה?', a:'לא, ללא עלות וללא התחייבות.' },
   { q:'האם זה מחייב רכישת ביטוח חדש?', a:'לא, כל פעולה תתבצע רק באישורכם.' },
-  { q:'למה נדרשים תעודת זהות ותאריך הנפקה?', a:'לצורך אימות והמשך טיפול מול הסוכן.' },
+  { q:'למה יידרשו תעודת זהות ותאריך הנפקה?', a:'לצורך ביצוע הבדיקה מול הר הביטוח — הסוכן יאסוף אותם טלפונית בשיחה עמכם.' },
   { q:'האם קפלן דהאן היא האתר הממשלתי הר הביטוח?', a:'לא — זו פנייה לבדיקה מול סוכן מורשה מטעם הפירמה.' },
 ];
 const faqArea = document.getElementById('faqArea');
@@ -567,7 +488,7 @@ faqArea.innerHTML = faqHtml;
 
 <div class="sticky-bar" id="stickyBar">
   <div class="inner">
-    <div class="txt">בדיקת כפל ביטוחים בחינם<span>סוכן מורשה יחזור אליכם באותו יום</span></div>
+    <div class="txt">בדיקת כפל ביטוחים<span>סוכן מורשה יחזור אליכם באותו יום</span></div>
     <a class="sbtn" href="#leadForm">השאירו פרטים ←</a>
   </div>
 </div>
